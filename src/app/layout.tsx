@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
-import { Roboto } from "next/font/google";
+import { Poppins } from "next/font/google";
+
+import { NextAuthProvider } from "@/providers/auth";
 
 import "../styles/globals.css";
 
-const robotoSans = Roboto({
-  variable: "--font-geist-sans",
+const poppins = Poppins({
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800", "900"],
 });
 
 export const metadata: Metadata = {
@@ -21,10 +23,10 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <body
-        className={`${robotoSans.variable} antialiased`}
+        className={`${poppins.className} antialiased`}
         cz-shortcut-listen="true"
       >
-        {children}
+        <NextAuthProvider>{children}</NextAuthProvider>
       </body>
     </html>
   );
