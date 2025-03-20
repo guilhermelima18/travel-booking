@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 
 import { NextAuthProvider } from "@/providers/auth";
+import { Header } from "@/components/header";
 
 import "../styles/globals.css";
 
@@ -26,7 +27,10 @@ export default function RootLayout({
         className={`${poppins.className} antialiased`}
         cz-shortcut-listen="true"
       >
-        <NextAuthProvider>{children}</NextAuthProvider>
+        <NextAuthProvider>
+          <Header />
+          {children}
+        </NextAuthProvider>
       </body>
     </html>
   );
