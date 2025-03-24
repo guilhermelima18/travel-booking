@@ -31,7 +31,7 @@ export function Header() {
 
       {status === "unauthenticated" && (
         <button
-          className="bg-purple-600 flex items-center gap-1 text-sm text-white p-2 rounded-md cursor-pointer"
+          className="bg-purple-600 flex items-center gap-1 text-sm text-white p-2 rounded-lg cursor-pointer"
           onClick={handleSignIn}
         >
           <FaSignInAlt />
