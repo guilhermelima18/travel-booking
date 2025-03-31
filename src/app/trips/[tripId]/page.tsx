@@ -36,7 +36,7 @@ export default async function Trip({ params }: { params: { tripId: string } }) {
         </p>
       </div>
 
-      <TripReservationForm />
+      <TripReservationForm trip={trip} />
     </div>
   );
 }
