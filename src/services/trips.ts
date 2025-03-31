@@ -9,3 +9,17 @@ export async function getTrips() {
     console.log(error);
   }
 }
+
+export async function getTripByID({ tripId }: { tripId: string }) {
+  try {
+    const trip = await prisma.trip.findFirst({
+      where: {
+        id: tripId,
+      },
+    });
+
+    return trip;
+  } catch (error) {
+    console.log(error);
+  }
+}
