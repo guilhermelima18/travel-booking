@@ -5,7 +5,7 @@ export function QuickSearch() {
     <div className="container mx-auto p-5 flex flex-col">
       <div className="w-full flex items-center gap-2">
         <span className="bg-gray-200 w-full h-[2px]" />
-        <h4 className="min-w-40 whitespace-nowrap">Tente pesquisar por</h4>
+        <h4 className="whitespace-nowrap">Tente pesquisar por</h4>
         <span className="bg-gray-200 w-full h-[2px]" />
       </div>
 

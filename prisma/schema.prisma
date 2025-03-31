@@ -13,15 +13,14 @@ model Account {
   type              String
   provider          String
   providerAccountId String  @map("provider_account_id")
-  refresh_token     String? @db.Text
-  access_token      String? @db.Text
+  refresh_token     String?
+  access_token      String?
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String? @db.Text
+  id_token          String?
   session_state     String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
   @@map("accounts")
@@ -60,20 +59,19 @@ model VerificationToken {
 }
 
 model Trip {
-  id          String   @id @default(uuid())
-  name        String
-  location    String
-  startDate   DateTime
-  endDate     DateTime
-  pricePerDay Decimal  @db.Decimal(10, 2)
-  description String
-  coverImage  String
-  imagesUrl   String[]
-  highlights  String[]
-  maxGuests   Int
-  countryCode String
-  recommended Boolean  @default(false)
-
+  id           String            @id @default(uuid())
+  name         String
+  location     String
+  startDate    DateTime
+  endDate      DateTime
+  pricePerDay  Decimal           @db.Decimal(10, 2)
+  description  String
+  coverImage   String
+  imagesUrl    String[]
+  highlights   String[]
+  maxGuests    Int
+  countryCode  String
+  recommended  Boolean           @default(false)
   reservations TripReservation[]
 
   @@map("trips")
@@ -86,9 +84,8 @@ model TripReservation {
   startDate DateTime
   endDate   DateTime
   totalPaid Decimal  @db.Decimal(10, 2)
-
-  trip Trip @relation(fields: [tripId], references: [id])
-  user User @relation(fields: [userId], references: [id])
+  trip      Trip     @relation(fields: [tripId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
 
   @@map("trips-reservations")
 }
