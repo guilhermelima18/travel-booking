@@ -37,6 +37,8 @@ export default async function Trip({ params }: { params: { tripId: string } }) {
       </div>
 
       <TripReservationForm trip={trip} />
+
+      <div className="bg-gray-300 w-full h-[1px] my-4 px-4" />
     </div>
   );
 }
