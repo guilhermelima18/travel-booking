@@ -4,6 +4,7 @@ import { TripReservationForm } from "./components/trip-reservation-form";
 import { getTripByID } from "@/services/trips";
 import { TripDescription } from "./components/trip-description";
 import { TripHighlight } from "./components/trip-highlight";
+import { TripLocation } from "./components/trip-location";
 
 export default async function Trip({ params }: { params: { tripId: string } }) {
   const { tripId } = params;
@@ -44,6 +45,7 @@ export default async function Trip({ params }: { params: { tripId: string } }) {
 
       <TripDescription description={trip?.description} />
       <TripHighlight highlights={trip?.highlights} />
+      <TripLocation />
     </div>
   );
 }
