@@ -1,7 +1,8 @@
-import { getTripByID } from "@/services/trips";
 import Image from "next/image";
 import ReactCountryFlag from "react-country-flag";
 import { TripReservationForm } from "./components/trip-reservation-form";
+import { getTripByID } from "@/services/trips";
+import { TripDescription } from "./components/trip-description";
 
 export default async function Trip({ params }: { params: { tripId: string } }) {
   const { tripId } = params;
@@ -39,6 +40,8 @@ export default async function Trip({ params }: { params: { tripId: string } }) {
       <TripReservationForm trip={trip} />
 
       <div className="bg-gray-300 w-full h-[1px] my-4 px-4" />
+
+      <TripDescription description={trip?.description} />
     </div>
   );
 }

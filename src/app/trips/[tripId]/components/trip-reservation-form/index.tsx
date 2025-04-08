@@ -22,8 +22,8 @@ export function TripReservationForm({ trip }: TripReservationFormProps) {
       </div>
 
       <div className="flex justify-between mt-4">
-        <p className="font-medium text-sm text-gray-800">Total: </p>
-        <p className="font-medium text-sm text-gray-800">R$ 2.500,00 </p>
+        <p className="font-medium text-sm text-gray-800">Total:</p>
+        <p className="font-medium text-sm text-gray-800">R$ 2.500,00</p>
       </div>
 
       <Button className="mt-4 w-full">Reservar agora</Button>
