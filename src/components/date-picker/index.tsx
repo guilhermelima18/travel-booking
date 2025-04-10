@@ -14,6 +14,12 @@ interface InputProps {
   errorMessage?: string;
   className?: string | undefined;
   placeholder?: string;
+  value?: string;
+  selected?: Date | null;
+  onChange?: (
+    date: Date | null,
+    event?: React.MouseEvent<HTMLElement> | React.KeyboardEvent<HTMLElement>
+  ) => void;
 }
 
 function DatePicker({
@@ -21,6 +27,9 @@ function DatePicker({
   placeholder,
   error,
   errorMessage,
+  value,
+  selected,
+  onChange,
   ...props
 }: InputProps) {
   const datePickerClassName = twMerge(
@@ -38,6 +47,9 @@ function DatePicker({
         className={datePickerClassName}
         enableTabLoop={false}
         placeholderText={placeholder}
+        value={value}
+        selected={selected}
+        onChange={onChange}
         {...props}
       />
       {error && errorMessage && (

@@ -45,7 +45,7 @@ export default async function Trip({ params }: { params: { tripId: string } }) {
 
       <TripDescription description={trip?.description} />
       <TripHighlight highlights={trip?.highlights} />
-      <TripLocation />
+      <TripLocation location={trip?.location} />
     </div>
   );
 }

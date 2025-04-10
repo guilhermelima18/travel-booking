@@ -1,4 +1,10 @@
-export function TripLocation() {
+import Button from "@/components/button";
+
+type TripLocationProps = {
+  location: string;
+};
+
+export function TripLocation({ location }: TripLocationProps) {
   return (
     <div className="flex flex-col p-4">
       <h2 className="font-semibold text-gray-900">Localização</h2>
@@ -10,6 +16,11 @@ export function TripLocation() {
           loading="lazy"
         />
       </div>
+
+      <p className="text-gray-900  text-sm font-semibold mt-4">{location}</p>
+      <Button variant="outlined" className="mt-4">
+        Ver no Google Maps
+      </Button>
     </div>
   );
 }

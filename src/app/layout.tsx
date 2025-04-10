@@ -5,6 +5,7 @@ import { NextAuthProvider } from "@/providers/auth";
 import { Header } from "@/components/header";
 
 import "../styles/globals.css";
+import { Footer } from "@/components/footer";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -30,6 +31,7 @@ export default function RootLayout({
         <NextAuthProvider>
           <Header />
           {children}
+          <Footer />
         </NextAuthProvider>
       </body>
     </html>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useState } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { AiOutlineMenu } from "react-icons/ai";
@@ -10,6 +11,7 @@ export function Header() {
   const [menuIsOpen, setMenuIsOpen] = useState(false);
 
   const { data, status } = useSession();
+  const router = useRouter();
 
   const handleSignIn = useCallback(async () => {
     await signIn("google");
@@ -24,10 +26,10 @@ export function Header() {
   };
 
   return (
-    <header className="container h-[92px] mx-auto flex items-center justify-end px-5">
-      {/* <div className="relative w-[182px] h-[32px]">
-        <Image src="" alt="Full Stack Week" fill />
-      </div> */}
+    <header className="container h-[92px] mx-auto flex items-center justify-between px-5">
+      <div className="cursor-pointer" onClick={() => router.push("/")}>
+        <h1 className="text-purple-600 font-semibold">Travel Booking</h1>
+      </div>
 
       {status === "unauthenticated" && (
         <button
