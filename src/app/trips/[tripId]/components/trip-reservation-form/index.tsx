@@ -1,11 +1,13 @@
 "use client";
 
+import { useMemo } from "react";
 import { Trip } from "@prisma/client";
+import { Controller, useForm } from "react-hook-form";
+import { differenceInDays } from "date-fns";
 
 import DatePicker from "@/components/date-picker";
 import Input from "@/components/input";
 import Button from "@/components/button";
-import { Controller, useForm } from "react-hook-form";
 
 type TripReservationFormProps = {
   trip: Trip;
@@ -21,13 +23,34 @@ export function TripReservationForm({ trip }: TripReservationFormProps) {
   const {
     control,
     register,
+    watch,
     handleSubmit,
     formState: { errors },
   } = useForm<CreateTripReservationForm>();
 
+  const startDate = watch("startDate");
+  const endDate = watch("endDate");
+
   const handleCreateTripReservation = (data: CreateTripReservationForm) => {
     console.log(data);
   };
+
+  const formatPrice = (value: number) => {
+    return new Intl.NumberFormat("pt-BR", {
+      style: "currency",
+      currency: "BRL",
+    }).format(value);
+  };
+
+  const totalPrice = useMemo(() => {
+    if (startDate && endDate) {
+      const diffInMs = differenceInDays(endDate, startDate);
+
+      return formatPrice(Number(trip?.pricePerDay) / diffInMs);
+    }
+
+    return formatPrice(0);
+  }, [startDate, endDate, trip?.pricePerDay]);
 
   return (
     <form className="p-4">
@@ -46,6 +69,8 @@ export function TripReservationForm({ trip }: TripReservationFormProps) {
               placeholder="Data início"
               selected={value}
               onChange={onChange}
+              openToDate={value ?? trip?.startDate}
+              minDate={trip?.startDate ? new Date(trip.startDate) : undefined}
               error={!!errors?.startDate?.message}
               errorMessage={errors?.startDate?.message}
             />
@@ -65,6 +90,9 @@ export function TripReservationForm({ trip }: TripReservationFormProps) {
               placeholder="Data final"
               selected={value}
               onChange={onChange}
+              openToDate={value ?? trip?.endDate}
+              minDate={trip?.startDate ? new Date(trip.startDate) : undefined}
+              maxDate={trip?.endDate ? new Date(trip.endDate) : undefined}
               error={!!errors?.endDate?.message}
               errorMessage={errors?.endDate?.message}
             />
@@ -87,7 +115,7 @@ export function TripReservationForm({ trip }: TripReservationFormProps) {
 
       <div className="flex justify-between mt-4">
         <p className="font-medium text-sm text-gray-800">Total:</p>
-        <p className="font-medium text-sm text-gray-800">R$ 2.500,00</p>
+        <p className="font-medium text-sm text-gray-800">{totalPrice}</p>
       </div>
 
       <Button

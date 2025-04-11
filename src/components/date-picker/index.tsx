@@ -16,6 +16,9 @@ interface InputProps {
   placeholder?: string;
   value?: string;
   selected?: Date | null;
+  minDate?: Date | undefined;
+  maxDate?: Date | undefined;
+  openToDate?: Date;
   onChange?: (
     date: Date | null,
     event?: React.MouseEvent<HTMLElement> | React.KeyboardEvent<HTMLElement>
@@ -29,6 +32,9 @@ function DatePicker({
   errorMessage,
   value,
   selected,
+  minDate,
+  maxDate,
+  openToDate,
   onChange,
   ...props
 }: InputProps) {
@@ -49,6 +55,9 @@ function DatePicker({
         placeholderText={placeholder}
         value={value}
         selected={selected}
+        minDate={minDate}
+        maxDate={maxDate}
+        openToDate={openToDate}
         onChange={onChange}
         {...props}
       />
