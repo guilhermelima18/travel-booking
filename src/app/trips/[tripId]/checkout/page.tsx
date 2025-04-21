@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
@@ -8,6 +9,7 @@ import { Trip } from "@prisma/client";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import ReactCountryFlag from "react-country-flag";
+import { Bounce, toast } from "react-toastify";
 
 import Button from "@/components/button";
 
@@ -23,7 +25,7 @@ export default function TripCheckout({
 
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { status } = useSession();
+  const { data, status } = useSession();
 
   const getTripById = useCallback(
     async ({
@@ -59,6 +61,77 @@ export default function TripCheckout({
           setTrip(responseJSON.trip);
           setTotalPrice(responseJSON.totalPrice);
         }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    [router]
+  );
+
+  const handleCheckoutReservation = useCallback(
+    async ({
+      tripId,
+      userId,
+      startDate,
+      endDate,
+      totalPaid,
+      guests,
+    }: {
+      tripId: string;
+      userId: string;
+      startDate: string | null;
+      endDate: string | null;
+      totalPaid: number;
+      guests: number;
+    }) => {
+      if (!startDate || !endDate) return;
+
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_BASE_URL}/trips/checkout`,
+          {
+            method: "POST",
+            body: Buffer.from(
+              JSON.stringify({
+                tripId: tripId,
+                userId,
+                startDate,
+                endDate,
+                totalPaid,
+                guests,
+              })
+            ),
+          }
+        );
+
+        const responseJSON = await response.json();
+
+        if (responseJSON.success) {
+          toast.success(`${responseJSON.message}`, {
+            position: "top-right",
+            autoClose: 5000,
+            transition: Bounce,
+          });
+        } else if (responseJSON.error.code === "RESERVATION_DATE_CONFLICT") {
+          toast.error(
+            "Já existe uma reserva para esse usuário e essa data inicial e final.",
+            {
+              position: "top-right",
+              autoClose: 5000,
+              transition: Bounce,
+            }
+          );
+        } else {
+          toast.error("Não foi possível concluir o checkout!", {
+            position: "top-right",
+            autoClose: 5000,
+            transition: Bounce,
+          });
+        }
+
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+
+        router.push("/");
       } catch (error) {
         console.log(error);
       }
@@ -152,7 +225,20 @@ export default function TripCheckout({
       </div>
 
       <div className="flex flex-col mt-4">
-        <Button>Finalizar compra</Button>
+        <Button
+          onClick={() =>
+            handleCheckoutReservation({
+              tripId: trip.id,
+              userId: (data?.user as any)?.id,
+              startDate,
+              endDate,
+              totalPaid: totalPrice,
+              guests: Number(guests),
+            })
+          }
+        >
+          Finalizar compra
+        </Button>
       </div>
     </div>
   );

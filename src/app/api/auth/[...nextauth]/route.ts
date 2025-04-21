@@ -13,6 +13,18 @@ const handler = NextAuth({
       clientSecret: process.env.GOOGLE_SECRET_ID as string,
     }),
   ],
+  callbacks: {
+    async session({ session, user }) {
+      session.user = { ...session.user, id: user.id } as {
+        id: string;
+        name: string;
+        email: string;
+        image: string;
+      };
+
+      return session;
+    },
+  },
 });
 
 export { handler as GET, handler as POST };

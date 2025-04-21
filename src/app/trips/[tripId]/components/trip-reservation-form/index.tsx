@@ -73,10 +73,12 @@ export function TripReservationForm({ trip }: TripReservationFormProps) {
         message: "Essa data já está reservada.",
       });
 
-      return setError("endDate", {
+      setError("endDate", {
         type: "manual",
         message: "Essa data já está reservada.",
       });
+
+      return;
     }
 
     router.push(
