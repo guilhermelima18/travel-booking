@@ -8,6 +8,7 @@ import { differenceInDays } from "date-fns";
 import DatePicker from "@/components/date-picker";
 import Input from "@/components/input";
 import Button from "@/components/button";
+import { convertDateWithoutUTC } from "@/helpers/functions";
 
 type TripReservationFormProps = {
   trip: Trip;
@@ -25,14 +26,44 @@ export function TripReservationForm({ trip }: TripReservationFormProps) {
     register,
     watch,
     handleSubmit,
+    setError,
     formState: { errors },
   } = useForm<CreateTripReservationForm>();
 
   const startDate = watch("startDate");
   const endDate = watch("endDate");
 
-  const handleCreateTripReservation = (data: CreateTripReservationForm) => {
+  const handleCreateTripReservation = async (
+    data: CreateTripReservationForm
+  ) => {
     console.log(data);
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/trips/check-trip-reservation-is-available`,
+      {
+        method: "POST",
+        body: Buffer.from(
+          JSON.stringify({
+            tripId: trip?.id,
+            startDate: convertDateWithoutUTC(data.startDate as Date),
+            endDate: convertDateWithoutUTC(data.endDate as Date),
+          })
+        ),
+      }
+    );
+
+    const responseJson = await response.json();
+
+    if (responseJson?.error?.code === "TRIP_ALREADY_RESERVED") {
+      setError("startDate", {
+        type: "manual",
+        message: "Essa data já está reservada.",
+      });
+
+      setError("endDate", {
+        type: "manual",
+        message: "Essa data já está reservada.",
+      });
+    }
   };
 
   const formatPrice = (value: number) => {
@@ -44,9 +75,9 @@ export function TripReservationForm({ trip }: TripReservationFormProps) {
 
   const totalPrice = useMemo(() => {
     if (startDate && endDate) {
-      const diffInMs = differenceInDays(endDate, startDate);
+      const differenceInDaysCount = differenceInDays(endDate, startDate);
 
-      return formatPrice(Number(trip?.pricePerDay) / diffInMs);
+      return formatPrice(Number(trip?.pricePerDay) * differenceInDaysCount);
     }
 
     return formatPrice(0);
