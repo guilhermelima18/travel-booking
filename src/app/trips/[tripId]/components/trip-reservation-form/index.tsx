@@ -63,9 +63,9 @@ export function TripReservationForm({ trip }: TripReservationFormProps) {
       }
     );
 
-    const responseJson = await response.json();
+    const responseJSON = await response.json();
 
-    if (responseJson?.error?.code === "TRIP_ALREADY_RESERVED") {
+    if (responseJSON?.error?.code === "TRIP_ALREADY_RESERVED") {
       setIsLoading(false);
 
       setError("startDate", {

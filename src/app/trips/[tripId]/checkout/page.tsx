@@ -51,6 +51,10 @@ export default function TripCheckout({
         );
         const responseJSON = await response.json();
 
+        if (responseJSON?.error) {
+          return router.push("/");
+        }
+
         if (responseJSON.success) {
           setTrip(responseJSON.trip);
           setTotalPrice(responseJSON.totalPrice);
@@ -59,7 +63,7 @@ export default function TripCheckout({
         console.log(error);
       }
     },
-    []
+    [router]
   );
 
   useEffect(() => {
