@@ -74,3 +74,21 @@ export async function checkTripReservationIsAvailable({
     console.log(error);
   }
 }
+
+export async function deleteTripReservation({
+  tripReservationId,
+}: {
+  tripReservationId: string;
+}) {
+  try {
+    const trip = await prisma.tripReservation.delete({
+      where: {
+        id: tripReservationId,
+      },
+    });
+
+    return trip;
+  } catch (error) {
+    console.log(error);
+  }
+}

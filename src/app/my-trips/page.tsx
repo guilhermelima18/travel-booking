@@ -17,9 +17,15 @@ export default async function MyTrips() {
     userId: (user?.user as any).id,
   });
 
-  if (!tripsReservations) return;
-
-  console.log(tripsReservations);
+  if (!tripsReservations?.length) {
+    return (
+      <div className="container mx-auto flex items-center justify-center p-4">
+        <h1 className="font-semibold text-gray-900 text-xl">
+          Você não tem viagens reservadas!
+        </h1>
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto p-4">

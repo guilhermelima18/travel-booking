@@ -1,10 +1,15 @@
+"use client";
+
+import { useCallback } from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { Trip, TripReservation } from "@prisma/client";
 import ReactCountryFlag from "react-country-flag";
-
-import { formatPrice } from "@/helpers/functions";
+import { Bounce, toast } from "react-toastify";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
+
+import { formatPrice } from "@/helpers/functions";
 import Button from "@/components/button";
 
 type TripReservationItemProps = {
@@ -16,6 +21,35 @@ export function TripReservationItem({
   reservation,
   trip,
 }: TripReservationItemProps) {
+  const router = useRouter();
+
+  const handleDeleteTripReservation = useCallback(
+    async ({ tripReservationId }: { tripReservationId: string }) => {
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_BASE_URL}/trips-reservations/trip-cancel/${tripReservationId}`,
+          {
+            method: "DELETE",
+          }
+        );
+        const responseJSON = await response.json();
+
+        if (responseJSON && responseJSON.success) {
+          toast.success(`${responseJSON.message}`, {
+            position: "top-right",
+            autoClose: 5000,
+            transition: Bounce,
+          });
+
+          router.push("/");
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    [router]
+  );
+
   return (
     <div className="flex flex-col">
       <div className="flex flex-col border border-gray-200 p-4 mt-4 shadow-lg rounded-lg">
@@ -78,7 +112,13 @@ export function TripReservationItem({
         </div>
 
         <div className="w-full flex mt-4">
-          <Button variant="danger" className="w-full">
+          <Button
+            variant="danger"
+            className="w-full"
+            onClick={() =>
+              handleDeleteTripReservation({ tripReservationId: reservation.id })
+            }
+          >
             Cancelar viagem
           </Button>
         </div>
