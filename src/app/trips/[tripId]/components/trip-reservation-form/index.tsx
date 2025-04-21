@@ -47,8 +47,6 @@ export function TripReservationForm({ trip }: TripReservationFormProps) {
     const startDate = data.startDate?.toISOString();
     const endDate = data.endDate?.toISOString();
 
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_BASE_URL}/trips/check-trip-reservation-is-available`,
       {

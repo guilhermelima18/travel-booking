@@ -12,7 +12,7 @@ export async function RecommendedTrips() {
         <span className="bg-gray-200 w-full h-[2px]" />
       </div>
 
-      <div className="flex flex-col items-center justify-center gap-4 mt-4">
+      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
         {!!trips?.length &&
           trips?.length > 0 &&
           trips.map((trip) => <TripItem key={trip?.id} trip={trip} />)}

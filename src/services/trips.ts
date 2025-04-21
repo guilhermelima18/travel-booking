@@ -16,6 +16,24 @@ export async function getTrips() {
   }
 }
 
+export async function getTripsBySearchParams({ text }: { text: string }) {
+  try {
+    const trips = await prisma.trip.findMany({
+      where: {
+        OR: [
+          { name: { contains: text, mode: "insensitive" } },
+          { description: { contains: text, mode: "insensitive" } },
+          { location: { contains: text, mode: "insensitive" } },
+        ],
+      },
+    });
+
+    return trips;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 export async function getTripByID({ tripId }: { tripId: string }) {
   try {
     const trip = await prisma.trip.findFirst({

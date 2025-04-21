@@ -129,9 +129,7 @@ export default function TripCheckout({
           });
         }
 
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-
-        router.push("/");
+        router.push("/my-trips");
       } catch (error) {
         console.log(error);
       }

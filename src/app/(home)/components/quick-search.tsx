@@ -9,7 +9,7 @@ export function QuickSearch() {
         <span className="bg-gray-200 w-full h-[2px]" />
       </div>
 
-      <div className="flex items-center justify-between mt-4">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4">
         <div className="flex flex-col items-center gap-1">
           <Image width={30} height={30} src="/hotel-icon.png" alt="Hotel" />
           <p className="text-sm text-gray-600">Hotel</p>
