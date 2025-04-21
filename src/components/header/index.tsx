@@ -43,7 +43,7 @@ export function Header() {
 
       {status === "authenticated" && (
         <div
-          className="flex items-center border border-gray-300 p-2 rounded-md gap-4 relative cursor-pointer"
+          className="min-w-32 flex items-center justify-center border border-gray-300 py-1 rounded-md gap-4 relative cursor-pointer"
           onClick={handleShowMenu}
         >
           <AiOutlineMenu size={18} />
@@ -57,9 +57,16 @@ export function Header() {
           />
 
           {menuIsOpen && (
-            <div className="absolute top-16 left-0 w-full h-full bg-white rounded-full flex flex-col justify-center items-center shadow-2xl cursor-pointer">
+            <div className="absolute top-13 right-0 w-full h-full min-h-20 bg-white rounded-md flex flex-col justify-center items-center gap-2 shadow-2xl cursor-pointer">
               <button
-                className="text-purple-600 text-sm font-semibold cursor-pointer"
+                className="w-[300px] text-purple-600 text-sm font-semibold cursor-pointer hover:underline"
+                onClick={() => router.push("/my-trips")}
+              >
+                Minhas viagens
+              </button>
+
+              <button
+                className="text-purple-600 text-sm font-semibold cursor-pointer hover:underline"
                 onClick={handleSignOut}
               >
                 Logout

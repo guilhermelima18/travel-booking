@@ -30,6 +30,27 @@ export async function getTripByID({ tripId }: { tripId: string }) {
   }
 }
 
+export async function getTripsReservationsByUser({
+  userId,
+}: {
+  userId: string;
+}) {
+  try {
+    const tripsReservations = await prisma.tripReservation.findMany({
+      where: {
+        userId,
+      },
+      include: {
+        trip: true,
+      },
+    });
+
+    return tripsReservations;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 export async function checkTripReservationIsAvailable({
   tripId,
   startDate,
