@@ -29,9 +29,11 @@ export default function RootLayout({
         cz-shortcut-listen="true"
       >
         <NextAuthProvider>
-          <Header />
-          {children}
-          <Footer />
+          <div className="min-h-screen flex flex-col justify-between">
+            <Header />
+            {children}
+            <Footer />
+          </div>
         </NextAuthProvider>
       </body>
     </html>

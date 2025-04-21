@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import { Trip } from "@prisma/client";
 import { Controller, useForm } from "react-hook-form";
 import { differenceInDays } from "date-fns";
@@ -8,7 +9,8 @@ import { differenceInDays } from "date-fns";
 import DatePicker from "@/components/date-picker";
 import Input from "@/components/input";
 import Button from "@/components/button";
-import { convertDateWithoutUTC } from "@/helpers/functions";
+
+import { convertDateWithoutUTC, formatPrice } from "@/helpers/functions";
 
 type TripReservationFormProps = {
   trip: Trip;
@@ -21,6 +23,10 @@ type CreateTripReservationForm = {
 };
 
 export function TripReservationForm({ trip }: TripReservationFormProps) {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const router = useRouter();
+
   const {
     control,
     register,
@@ -36,7 +42,13 @@ export function TripReservationForm({ trip }: TripReservationFormProps) {
   const handleCreateTripReservation = async (
     data: CreateTripReservationForm
   ) => {
-    console.log(data);
+    setIsLoading(true);
+
+    const startDate = data.startDate?.toISOString();
+    const endDate = data.endDate?.toISOString();
+
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_BASE_URL}/trips/check-trip-reservation-is-available`,
       {
@@ -44,8 +56,8 @@ export function TripReservationForm({ trip }: TripReservationFormProps) {
         body: Buffer.from(
           JSON.stringify({
             tripId: trip?.id,
-            startDate: convertDateWithoutUTC(data.startDate as Date),
-            endDate: convertDateWithoutUTC(data.endDate as Date),
+            startDate: convertDateWithoutUTC(startDate as string),
+            endDate: convertDateWithoutUTC(endDate as string),
           })
         ),
       }
@@ -54,23 +66,24 @@ export function TripReservationForm({ trip }: TripReservationFormProps) {
     const responseJson = await response.json();
 
     if (responseJson?.error?.code === "TRIP_ALREADY_RESERVED") {
+      setIsLoading(false);
+
       setError("startDate", {
         type: "manual",
         message: "Essa data já está reservada.",
       });
 
-      setError("endDate", {
+      return setError("endDate", {
         type: "manual",
         message: "Essa data já está reservada.",
       });
     }
-  };
 
-  const formatPrice = (value: number) => {
-    return new Intl.NumberFormat("pt-BR", {
-      style: "currency",
-      currency: "BRL",
-    }).format(value);
+    router.push(
+      `/trips/${trip?.id}/checkout?startDate=${startDate}&endDate=${endDate}&guests=${data.guests}`
+    );
+
+    setIsLoading(false);
   };
 
   const totalPrice = useMemo(() => {
@@ -138,6 +151,10 @@ export function TripReservationForm({ trip }: TripReservationFormProps) {
               value: true,
               message: "Número de hóspedes é obrigatório",
             },
+            max: {
+              value: trip?.maxGuests,
+              message: `Número de hóspedes não pode ser maior que ${trip?.maxGuests}`,
+            },
           })}
           error={!!errors?.guests}
           errorMessage={errors?.guests?.message}
@@ -151,9 +168,10 @@ export function TripReservationForm({ trip }: TripReservationFormProps) {
 
       <Button
         className="mt-4 w-full"
+        disabled={isLoading}
         onClick={handleSubmit(handleCreateTripReservation)}
       >
-        Reservar agora
+        {isLoading ? "Aguarde..." : "Reservar agora"}
       </Button>
     </form>
   );

@@ -1,4 +1,4 @@
-export function convertDateWithoutUTC(dateValue: Date) {
+export function convertDateWithoutUTC(dateValue: string) {
   const date = new Date(dateValue);
 
   const year = date.getFullYear();
@@ -6,4 +6,11 @@ export function convertDateWithoutUTC(dateValue: Date) {
   const day = String(date.getDate()).padStart(2, "0");
 
   return `${year}-${month}-${day} 00:00:00.000`;
+}
+
+export function formatPrice(value: number) {
+  return new Intl.NumberFormat("pt-BR", {
+    style: "currency",
+    currency: "BRL",
+  }).format(value);
 }

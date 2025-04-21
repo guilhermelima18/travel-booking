@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { checkTripReservationIsAvailable } from "@/services/trips";
 import { prisma } from "@/lib/prisma";
+import { differenceInDays } from "date-fns";
 
 export async function POST(req: Request) {
   const { tripId, startDate, endDate } = await req.json();
@@ -43,9 +44,14 @@ export async function POST(req: Request) {
     );
   }
 
+  const differenceInDaysCount = differenceInDays(endDate, startDate);
+  const total = Number(trip?.pricePerDay) * differenceInDaysCount;
+
   return new NextResponse(
     JSON.stringify({
       success: true,
+      trip,
+      totalPrice: total,
     }),
     {
       status: 200,
