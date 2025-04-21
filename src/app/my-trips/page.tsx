@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 
 import { authOptions } from "../api/auth/[...nextauth]/route";
 import { getTripsReservationsByUser } from "@/services/trips";
+import { TripReservationItem } from "./components/trip-reservation-item";
 
 export default async function MyTrips() {
   const user = await getServerSession(authOptions);
@@ -21,8 +22,16 @@ export default async function MyTrips() {
   console.log(tripsReservations);
 
   return (
-    <div>
-      <h1>Minhas viagens</h1>
+    <div className="container mx-auto p-4">
+      <h1 className="font-semibold text-gray-900 text-xl">Minhas viagens</h1>
+
+      {tripsReservations.map((reservation) => (
+        <TripReservationItem
+          key={reservation.id}
+          reservation={reservation}
+          trip={reservation.trip}
+        />
+      ))}
     </div>
   );
 }
